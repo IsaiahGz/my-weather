@@ -19,3 +19,29 @@ const baseForecastURL = 'http://api.openweathermap.org/data/2.5/forecast';
 const getForecastURL = (lat, lon) => {
   return `${baseForecastURL}?lat=${lat}&lon=${lon}&appid=${apiKey}`;
 };
+
+// Fetch functions
+const toJSON = (response) => {
+  return response.json();
+};
+
+const displayWeather = (data) => {
+  // Data is a response from the geocoding API, should have 1 city
+  if (data.length !== 1) return;
+  const cityData = data[0];
+  fetch(getForecastURL(cityData.lat, cityData.lon))
+    .then(toJSON)
+    .then((data) => {
+      console.log(data);
+    });
+};
+
+const cityWeatherFetch = (city) => {
+  fetch(getGeocodingURL(city)).then(toJSON).then(displayWeather);
+};
+
+// Event handlers
+searchFormEl.submit((event) => {
+  event.preventDefault();
+  cityWeatherFetch(cityInputEl.val());
+});
