@@ -12,22 +12,30 @@
       <h1 class="p-3 text-center text-3xl text-neutral-100 font-semibold">My Weather</h1>
     </header>
     <main class="container mx-auto mt-10">
-      <div class="flex flex-row">
-        <!-- City search and history -->
-        <div class="basis-full md:basis-1/3 p-5">
-          <form action="#">
-            <label for="citySearchInput" class="block text-2xl font-semibold">Search for a city:</label>
-            <input id="citySearchInput" type="text" class="w-full block rounded p-2 mt-2" placeholder="Ex: San Diego" />
-            <button id="citySearchButton" type="submit" class="bg-blue-600 hover:bg-blue-800 rounded text-neutral-100 p-1 mt-2 w-full">
-              Search
-            </button>
-          </form>
-          <ul id="citySearchHistory" class="mt-5 border-t-4 border-grey-400">
-            <li></li>
-          </ul>
+      <div class="flex flex-row flex-wrap">
+        <!-- City search and history column -->
+        <div class="basis-full md:basis-1/3 p-2">
+          <div class="p-3 bg-sky-300 rounded">
+            <form id="search-form" action="#">
+              <label for="citySearchInput" class="block text-2xl font-semibold">Search for a city:</label>
+              <input id="citySearchInput" type="text" class="w-full block rounded p-2 mt-2" placeholder="Ex: San Diego" />
+              <button id="citySearchButton" type="submit" class="bg-blue-600 hover:bg-blue-800 rounded text-neutral-100 p-1 mt-2 w-full">
+                Search
+              </button>
+            </form>
+            <ul id="citySearchHistory" class="mt-5 border-t-4 border-gray-700"></ul>
+          </div>
         </div>
-        <!-- Weather display -->
-        <div class="basis-full md:basis-1/3 p-5"></div>
+        <!-- Weather display column -->
+        <div class="basis-full md:basis-2/3 p-2">
+          <div class="p-3 bg-sky-300 rounded">
+            <!-- Current Weather -->
+            <section id="current-weather"></section>
+            <h3 class="mt-2 text-xl font-semibold">5-Day Forecast:</h3>
+            <!-- 5 Day Forecast Row  -->
+            <div class="flex flex-row flex-wrap"></div>
+          </div>
+        </div>
       </div>
     </main>
     <script
