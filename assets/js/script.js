@@ -25,6 +25,36 @@ const toJSON = (response) => {
   return response.json();
 };
 
+const rawDataToDays = (rawData) => {
+  // Given the raw data from the forecast API, return an array where index 0 is today, index 1 is tomorrow, etc.
+  const toReturn = [];
+  let iDate = null;
+  for (let i = 0; i < 6; i++) {
+    if (!iDate) {
+      // On first iteration
+      const firstDay = dayjs.unix(rawData.list[0].dt);
+      const currentDayArr = rawData.list.filter((dataPoint) => {
+        const day = dayjs.unix(dataPoint.dt);
+        if (firstDay.isSame(day, 'day')) return true;
+        return false;
+      });
+      toReturn.push(currentDayArr);
+      iDate = firstDay;
+    } else {
+      // Find index where next day is
+      const nextDayIndex = toReturn[toReturn.length - 1].length;
+      const nextDay = dayjs.unix(rawData.list[nextDayIndex].dt);
+      const nextDayArr = rawData.list.filter((dataPoint) => {
+        const day = dayjs.unix(dataPoint.dt);
+        if (nextDay.isSame(day, 'day')) return true;
+        return false;
+      });
+      toReturn.push(nextDayArr);
+    }
+  }
+  return toReturn;
+};
+
 const displayWeather = (data) => {
   // Data is a response from the geocoding API, should have 1 city
   if (data.length !== 1) return;
@@ -32,11 +62,12 @@ const displayWeather = (data) => {
   fetch(getForecastURL(cityData.lat, cityData.lon))
     .then(toJSON)
     .then((data) => {
-      console.log(data);
+      const days = rawDataToDays(data);
     });
 };
 
 const cityWeatherFetch = (city) => {
+  if (!city) return; // Do nothing if theres no input
   fetch(getGeocodingURL(city)).then(toJSON).then(displayWeather);
 };
 
