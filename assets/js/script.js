@@ -25,6 +25,7 @@ const rawDataToDays = (rawData) => {
   // Given the raw data from the forecast API, return an array where index 0 is today, index 1 is tomorrow, etc.
   const toReturn = [];
   let iDate = null;
+  let dayIndex = 0;
   for (let i = 0; i < 6; i++) {
     if (!iDate) {
       // On first iteration
@@ -35,17 +36,18 @@ const rawDataToDays = (rawData) => {
         return false;
       });
       toReturn.push(currentDayArr);
+      dayIndex += currentDayArr.length;
       iDate = firstDay;
     } else {
       // Find index where next day is
-      const nextDayIndex = toReturn[toReturn.length - 1].length;
-      const nextDay = dayjs.unix(rawData.list[nextDayIndex].dt);
+      const nextDay = dayjs.unix(rawData.list[dayIndex].dt);
       const nextDayArr = rawData.list.filter((dataPoint) => {
         const day = dayjs.unix(dataPoint.dt);
         if (nextDay.isSame(day, 'day')) return true;
         return false;
       });
       toReturn.push(nextDayArr);
+      dayIndex += nextDayArr.length;
     }
   }
   return toReturn;
