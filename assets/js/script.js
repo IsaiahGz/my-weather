@@ -80,7 +80,20 @@ const dayArrayToObj = (dayArray) => {
     currentWeatherCondition,
     dayHigh,
     dayLow,
+    instanceTime: dayjs.unix(dayArray[0].dt),
   };
+};
+
+const createDayPElements = (dayObj) => {
+  // Given an object from dayArrayToObj(), creates P elements for temp, humidity, etc
+  const baseP = () => $('<p>').addClass('text-base');
+  const tempEl = baseP().text(`Temperature: ${dayObj.currentTemp}`);
+  const feelsEl = baseP().text(`Feels like: ${dayObj.currentFeelsLike}`);
+  const highEl = baseP().text(`High: ${dayObj.dayHigh}`);
+  const lowEl = baseP().text(`Low: ${dayObj.dayLow}`);
+  const humidEl = baseP().text(`Humidity: ${dayObj.currentHumidity}%`);
+  const windEl = baseP().text(`Winds: ${dayObj.currentWind} MPH`);
+  return [tempEl, feelsEl, highEl, lowEl, humidEl, windEl];
 };
 
 // Fetch functions
@@ -95,8 +108,21 @@ const displayWeather = (data) => {
   fetch(getForecastURL(cityData.lat, cityData.lon))
     .then(toJSON)
     .then((data) => {
-      const days = rawDataToDays(data);
-      console.log(days);
+      const cityData = data.city;
+      const daysArray = rawDataToDays(data);
+      const daysArrayObj = daysArray.map(dayArrayToObj);
+      console.log(data);
+      console.log(daysArray);
+      console.log(daysArrayObj);
+
+      // Build and display current weather section
+      const todayObj = daysArrayObj[0];
+      const todayH2 = $('<h2>').addClass('text-2xl font-semibold');
+      todayH2.text(`${cityData.name}, ${cityData.country} - ${todayObj.instanceTime.format('M/D')}`);
+      currentWeatherEl.text('');
+      currentWeatherEl.append([todayH2, ...createDayPElements(todayObj)]);
+
+      // Build and display the 5 day forecast
     });
 };
 
