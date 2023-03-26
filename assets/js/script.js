@@ -17,14 +17,10 @@ const getGeocodingURL = (city) => {
 // Forecast API
 const baseForecastURL = 'http://api.openweathermap.org/data/2.5/forecast';
 const getForecastURL = (lat, lon) => {
-  return `${baseForecastURL}?lat=${lat}&lon=${lon}&appid=${apiKey}`;
+  return `${baseForecastURL}?lat=${lat}&lon=${lon}&appid=${apiKey}&units=imperial`;
 };
 
-// Fetch functions
-const toJSON = (response) => {
-  return response.json();
-};
-
+// Utility functions
 const rawDataToDays = (rawData) => {
   // Given the raw data from the forecast API, return an array where index 0 is today, index 1 is tomorrow, etc.
   const toReturn = [];
@@ -55,6 +51,41 @@ const rawDataToDays = (rawData) => {
   return toReturn;
 };
 
+const dayArrayToObj = (dayArray) => {
+  // Given an array from rawDataToDays() for a specific day, turn it into useable information
+  const dayHigh = dayArray.reduce((accumulator, currentVal) => {
+    const dataHigh = currentVal.main.temp_max;
+    if (accumulator < dataHigh) return dataHigh;
+    else return accumulator;
+  }, 0);
+
+  const dayLow = dayArray.reduce((accumulator, currentVal) => {
+    const dataLow = currentVal.main.temp_min;
+    if (accumulator > dataLow) return dataLow;
+    else return accumulator;
+  }, 999);
+
+  const currentTemp = dayArray[0].main.temp;
+  const currentFeelsLike = dayArray[0].main.feels_like;
+  const currentHumidity = dayArray[0].main.humidity;
+  const currentWind = dayArray[0].wind.speed;
+  const currentWeatherCondition = dayArray[0].weather[0].main;
+  return {
+    currentTemp,
+    currentFeelsLike,
+    currentHumidity,
+    currentWind,
+    currentWeatherCondition,
+    dayHigh,
+    dayLow,
+  };
+};
+
+// Fetch functions
+const toJSON = (response) => {
+  return response.json();
+};
+
 const displayWeather = (data) => {
   // Data is a response from the geocoding API, should have 1 city
   if (data.length !== 1) return;
@@ -63,6 +94,7 @@ const displayWeather = (data) => {
     .then(toJSON)
     .then((data) => {
       const days = rawDataToDays(data);
+      console.log(days);
     });
 };
 
