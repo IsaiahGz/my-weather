@@ -87,10 +87,10 @@ const dayArrayToObj = (dayArray) => {
 const createDayPElements = (dayObj) => {
   // Given an object from dayArrayToObj(), creates P elements for temp, humidity, etc
   const baseP = () => $('<p>').addClass('text-base');
-  const tempEl = baseP().text(`Temperature: ${dayObj.currentTemp}`);
-  const feelsEl = baseP().text(`Feels like: ${dayObj.currentFeelsLike}`);
-  const highEl = baseP().text(`High: ${dayObj.dayHigh}`);
-  const lowEl = baseP().text(`Low: ${dayObj.dayLow}`);
+  const tempEl = baseP().text(`Temperature: ${Math.round(dayObj.currentTemp)}`);
+  const feelsEl = baseP().text(`Feels like: ${Math.round(dayObj.currentFeelsLike)}`);
+  const highEl = baseP().text(`High: ${Math.round(dayObj.dayHigh)}`);
+  const lowEl = baseP().text(`Low: ${Math.round(dayObj.dayLow)}`);
   const humidEl = baseP().text(`Humidity: ${dayObj.currentHumidity}%`);
   const windEl = baseP().text(`Winds: ${dayObj.currentWind} MPH`);
   return [tempEl, feelsEl, highEl, lowEl, humidEl, windEl];
