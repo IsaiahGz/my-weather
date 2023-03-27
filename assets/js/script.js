@@ -183,7 +183,7 @@ const displayWeather = (data) => {
       for (let i = 1; i < daysArrayObj.length; i++) {
         // Indexes 1 through 5 contain the days needed
         const indexObj = daysArrayObj[i];
-        const outerDiv = $('<div>').addClass('p-2 w-1/3 md:w-1/5');
+        const outerDiv = $('<div>').addClass('p-2 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5');
 
         const daySection = $('<section>').addClass('bg-sky-200 p-3 rounded');
         const dayH3 = $('<h3>').addClass('text-xl font-semibold inline-block mr-2');
