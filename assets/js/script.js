@@ -123,6 +123,20 @@ const displayWeather = (data) => {
       currentWeatherEl.append([todayH2, ...createDayPElements(todayObj)]);
 
       // Build and display the 5 day forecast
+      fiveForecastEl.text('');
+      for (let i = 1; i < daysArrayObj.length; i++) {
+        // Indexes 1 through 5 contain the days needed
+        const indexObj = daysArrayObj[i];
+        const outerDiv = $('<div>').addClass('p-2 w-1/3 md:w-1/5');
+
+        const daySection = $('<section>').addClass('bg-sky-200 p-3 rounded');
+        const dayH3 = $('<h3>').addClass('text-xl font-semibold');
+        dayH3.text(`${indexObj.instanceTime.format('M/D')}`);
+
+        fiveForecastEl.append(outerDiv);
+        outerDiv.append(daySection);
+        daySection.append([dayH3, ...createDayPElements(indexObj)]);
+      }
     });
 };
 
