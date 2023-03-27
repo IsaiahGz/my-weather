@@ -149,9 +149,6 @@ const displayWeather = (data) => {
       displayHistory();
       const daysArray = rawDataToDays(data);
       const daysArrayObj = daysArray.map(dayArrayToObj);
-      console.log(data);
-      console.log(daysArray);
-      console.log(daysArrayObj);
 
       // Build and display current weather section
       const todayObj = daysArrayObj[0];
