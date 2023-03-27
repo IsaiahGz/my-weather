@@ -108,6 +108,9 @@ const displayWeather = (data) => {
   fetch(getForecastURL(cityData.lat, cityData.lon))
     .then(toJSON)
     .then((data) => {
+      // If its first load, hide the initial message and show others
+      $('.hidden').removeClass('hidden');
+      $('#initial-message').addClass('hidden');
       const cityData = data.city;
       const daysArray = rawDataToDays(data);
       const daysArrayObj = daysArray.map(dayArrayToObj);
