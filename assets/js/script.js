@@ -21,6 +21,38 @@ const getForecastURL = (lat, lon) => {
 };
 
 // Utility functions
+const getHistory = () => {
+  return JSON.parse(localStorage.getItem('cityHistory')) || [];
+};
+
+const addHistory = (newCity) => {
+  const history = getHistory();
+  // Check if whats being added already exists in history
+  if (history.indexOf(newCity) >= 0) return;
+  // Add to history
+  history.push(newCity);
+  localStorage.setItem('cityHistory', JSON.stringify(history));
+};
+
+const displayHistory = () => {
+  // Clear it
+  historyUlEl.text('');
+  const history = getHistory();
+  for (let i = 0; i < history.length; i++) {
+    // Create li and button
+    const liEl = $('<li>').addClass('mt-2');
+    const btnEl = $('<button>').addClass('bg-orange-300 hover:bg-orange-400 p-2 rounded block mx-auto');
+    btnEl.text(history[i]);
+    btnEl.click(() => {
+      cityWeatherFetch(history[i]);
+    });
+
+    // Append to list
+    historyUlEl.append(liEl);
+    liEl.append(btnEl);
+  }
+};
+
 const rawDataToDays = (rawData) => {
   // Given the raw data from the forecast API, return an array where index 0 is today, index 1 is tomorrow, etc.
   const toReturn = [];
@@ -112,6 +144,9 @@ const displayWeather = (data) => {
       $('.hidden').removeClass('hidden');
       $('#initial-message').addClass('hidden');
       const cityData = data.city;
+      // Add city name to history
+      addHistory(cityData.name);
+      displayHistory();
       const daysArray = rawDataToDays(data);
       const daysArrayObj = daysArray.map(dayArrayToObj);
       console.log(data);
@@ -152,4 +187,9 @@ const cityWeatherFetch = (city) => {
 searchFormEl.submit((event) => {
   event.preventDefault();
   cityWeatherFetch(cityInputEl.val());
+});
+
+$(() => {
+  // On page load, show history
+  displayHistory();
 });
