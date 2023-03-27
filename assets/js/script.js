@@ -155,10 +155,28 @@ const displayWeather = (data) => {
 
       // Build and display current weather section
       const todayObj = daysArrayObj[0];
-      const todayH2 = $('<h2>').addClass('text-2xl font-semibold');
+      const todayH2 = $('<h2>').addClass('text-2xl font-semibold inline-block mr-2');
       todayH2.text(`${cityData.name}, ${cityData.country} - ${todayObj.instanceTime.format('M/D')}`);
+      // Create icon
+      const iconEl = $('<i>');
+      switch (todayObj.currentWeatherCondition) {
+        case 'Clear':
+          iconEl.addClass('fa-solid fa-sun');
+          break;
+        case 'Clouds':
+          iconEl.addClass('fa-solid fa-cloud');
+          break;
+        case 'Rain':
+          iconEl.addClass('fa-solid fa-cloud-rain');
+          break;
+        case 'Snow':
+          iconEl.addClass('fa-solid fa-snowflake');
+          break;
+        default:
+          iconEl.addClass('fa-solid fa-cloud');
+      }
       currentWeatherEl.text('');
-      currentWeatherEl.append([todayH2, ...createDayPElements(todayObj)]);
+      currentWeatherEl.append([todayH2, iconEl, ...createDayPElements(todayObj)]);
 
       // Build and display the 5 day forecast
       fiveForecastEl.text('');
@@ -168,12 +186,31 @@ const displayWeather = (data) => {
         const outerDiv = $('<div>').addClass('p-2 w-1/3 md:w-1/5');
 
         const daySection = $('<section>').addClass('bg-sky-200 p-3 rounded');
-        const dayH3 = $('<h3>').addClass('text-xl font-semibold');
+        const dayH3 = $('<h3>').addClass('text-xl font-semibold inline-block mr-2');
         dayH3.text(`${indexObj.instanceTime.format('M/D')}`);
+
+        // Create icon
+        const fiveIconEl = $('<i>');
+        switch (indexObj.currentWeatherCondition) {
+          case 'Clear':
+            fiveIconEl.addClass('fa-solid fa-sun');
+            break;
+          case 'Clouds':
+            fiveIconEl.addClass('fa-solid fa-cloud');
+            break;
+          case 'Rain':
+            fiveIconEl.addClass('fa-solid fa-cloud-rain');
+            break;
+          case 'Snow':
+            fiveIconEl.addClass('fa-solid fa-snowflake');
+            break;
+          default:
+            fiveIconEl.addClass('fa-solid fa-cloud');
+        }
 
         fiveForecastEl.append(outerDiv);
         outerDiv.append(daySection);
-        daySection.append([dayH3, ...createDayPElements(indexObj)]);
+        daySection.append([dayH3, fiveIconEl, ...createDayPElements(indexObj)]);
       }
     });
 };
